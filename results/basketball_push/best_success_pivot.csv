@@ -1,0 +1,4 @@
+run_label,config_name,basketball-v3,push-v3
+basketball_push,config_1,1.0,1.0
+basketball_push,config_2,0.0,1.0
+basketball_push,config_3,0.02,0.82

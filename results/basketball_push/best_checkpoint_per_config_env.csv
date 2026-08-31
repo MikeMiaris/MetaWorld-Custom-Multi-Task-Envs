@@ -1,0 +1,7 @@
+run_label,config_name,env_name,checkpoint_step,checkpoint_label,mean_success_rate,mean_return,mean_steps,mean_first_success_step,eval_seeds,total_episodes
+basketball_push,config_1,basketball-v3,7200000,7200000,1.0,162.55854202912545,63.28,63.28,1,50
+basketball_push,config_1,push-v3,3300000,3300000,1.0,249.55102768865217,52.58,52.58,1,50
+basketball_push,config_2,basketball-v3,9100000,9100000,0.0,828.3008750814538,500.0,,1,50
+basketball_push,config_2,push-v3,4850000,4850000,1.0,234.32902891026453,49.96,49.96,1,50
+basketball_push,config_3,basketball-v3,8700000,8700000,0.02,274.0164516050312,492.44,122.0,1,50
+basketball_push,config_3,push-v3,1800000,1800000,0.82,66.59310875528196,142.76,64.34146341463415,1,50

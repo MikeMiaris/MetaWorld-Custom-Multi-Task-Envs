@@ -1,0 +1,7 @@
+run_label,config_name,env_name,checkpoint_step,checkpoint_label,mean_success_rate,mean_return,mean_steps,mean_first_success_step,eval_seeds,total_episodes
+basketball_pickplace,config_1,basketball-v3,4200000,4200000,1.0,170.9771127137864,66.72,66.72,1,50
+basketball_pickplace,config_1,pick-place-v3,3000000,3000000,1.0,89.62182606381631,48.08,48.08,1,50
+basketball_pickplace,config_2,basketball-v3,3750000,3750000,1.0,208.3513763121861,68.06,68.06,1,50
+basketball_pickplace,config_2,pick-place-v3,2200000,2200000,1.0,147.46856054050244,59.88,59.88,1,50
+basketball_pickplace,config_3,basketball-v3,3300000,3300000,1.0,221.88969821200084,70.76,70.76,1,50
+basketball_pickplace,config_3,pick-place-v3,1500000,1500000,1.0,67.243223095932,43.18,43.18,1,50
