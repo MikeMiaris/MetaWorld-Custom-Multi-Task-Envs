@@ -260,7 +260,7 @@ Training horizon:
 ![basketball_push config_3 return](results/basketball_push/figures/basketball_push_config_3_avg_return_per_env.png)
 
 
-### Interpretation
+### Συμπεράσματα
 
 Το `basketball_push` είναι το πιο ενδιαφέρον pair από πλευράς δυσκολίας, επειδή συνδυάζει ένα αρκετά δύσκολο/unstable task (`basketball-v3`) με ένα task που συνήθως μαθαίνεται πιο εύκολα (`push-v3`).
 
