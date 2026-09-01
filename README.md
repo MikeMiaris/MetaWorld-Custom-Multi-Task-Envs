@@ -278,3 +278,85 @@ push-v3       = 1.00
 Το `config_3` αποτυγχάνει σχεδόν πλήρως στο `basketball-v3` και πετυχαίνει μόνο μερική απόδοση στο `push-v3`. Αυτό δείχνει ότι περισσότερο entropy/exploration δεν οδηγεί απαραίτητα σε καλύτερη multi-task απόδοση.
 
 ---
+
+## How to Run New Experiments
+
+### Train one config
+
+```bash
+python scripts/training/train_custom_mt_pair.py --pair basketball_push --combo config_1 --timesteps 10000000 --horizon-label 10m --n-envs 8 --device cpu --start-method spawn
+```
+
+### Train all configs manually
+
+```bash
+python scripts/training/train_custom_mt_pair.py --pair basketball_push --combo config_1 --timesteps 10000000 --horizon-label 10m --n-envs 8 --device cpu --start-method spawn
+python scripts/training/train_custom_mt_pair.py --pair basketball_push --combo config_2 --timesteps 10000000 --horizon-label 10m --n-envs 8 --device cpu --start-method spawn
+python scripts/training/train_custom_mt_pair.py --pair basketball_push --combo config_3 --timesteps 10000000 --horizon-label 10m --n-envs 8 --device cpu --start-method spawn
+```
+
+### Evaluate all configs
+
+```bash
+python scripts/evaluation/evaluate_custom_mt_pair.py --pair basketball_push --horizon-label 10m --include-final
+```
+
+### Evaluate only one config
+
+```bash
+python scripts/evaluation/evaluate_custom_mt_pair.py --pair basketball_push --configs config_1 --horizon-label 10m --include-final
+```
+
+### Evaluate with more seeds
+
+```bash
+python scripts/evaluation/evaluate_custom_mt_pair.py --pair basketball_push --configs config_1 --horizon-label 10m --eval-seeds 67,68,69 --include-final
+```
+
+### Evaluate only selected checkpoints
+
+```bash
+python scripts/evaluation/evaluate_custom_mt_pair.py --pair basketball_push --configs config_1 --horizon-label 10m --exact-checkpoints 3300000,7200000,10000000 --include-final
+```
+
+---
+
+## How to Add a New Custom-MT Pair
+
+Για να προστεθεί νέο pair, πρέπει να ενημερωθούν τα config files.
+
+Παράδειγμα για:
+
+```text
+pick-place-v3 + push-v3
+```
+
+προσθήκη στο `PAIRS` dictionary:
+
+```python
+"pickplace_push": PairConfig(
+    pair_id="pickplace_push",
+    task_names=("pick-place-v3", "push-v3"),
+    default_total_timesteps=10_000_000,
+    horizon_label="10m",
+),
+```
+
+Αυτό πρέπει να υπάρχει και στο:
+
+```text
+scripts/training/custom_mt_config.py
+scripts/evaluation/custom_mt_config.py
+```
+
+Μετά μπορεί να τρέξει:
+
+```bash
+python scripts/training/train_custom_mt_pair.py --pair pickplace_push --combo config_1 --timesteps 10000000 --horizon-label 10m --n-envs 8 --device cpu --start-method spawn
+```
+
+και:
+
+```bash
+python scripts/evaluation/evaluate_custom_mt_pair.py --pair pickplace_push --horizon-label 10m --include-final
+```
