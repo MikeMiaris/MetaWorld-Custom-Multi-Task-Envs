@@ -10,7 +10,6 @@
 | `config_2` | Conservative/stable         | `3e-5`          | `2048`    | `16,384`                | `1024`       | `15`       | `240`                        | `0.10`       | `0.002`    | `0.8`     | `0.3`           | `[256,256]` |
 | `config_3` | Exploration/aggressive      | `2e-4`          | `2048`    | `16,384`                | `1024`       | `10`       | `160`                        | `0.20`       | `0.01`     | `0.5`     | `0.5`           | `[256,256]` |
 
-### Λογική πίσω από τα configurations
 
 #### `config_1` — Balanced custom-MT baseline
 
@@ -258,7 +257,7 @@ Training horizon:
 ![basketball_push config_3 return](results/basketball_push/figures/basketball_push_config_3_avg_return_per_env.png)
 
 
-### Interpretation
+### Συμπεράσματα
 
 Το `basketball_push` είναι το πιο ενδιαφέρον pair από πλευράς δυσκολίας, επειδή συνδυάζει ένα αρκετά δύσκολο/unstable task (`basketball-v3`) με ένα task που συνήθως μαθαίνεται πιο εύκολα (`push-v3`).
 
@@ -446,3 +445,4 @@ python scripts/training/train_custom_mt_pair.py --pair pickplace_push --combo co
 ```bash
 python scripts/evaluation/evaluate_custom_mt_pair.py --pair pickplace_push --horizon-label 10m --include-final
 ```
+
