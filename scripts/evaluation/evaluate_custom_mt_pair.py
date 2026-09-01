@@ -1,16 +1,3 @@
-"""
-Evaluate checkpoints from the cleaned custom-MT PPO runs.
-
-For each selected checkpoint, the shared policy is evaluated separately on each
-MT1 environment in the pair. The observation is augmented with the same one-hot
-task id order used during training.
-
-Examples:
-    python scripts/evaluation/evaluate_custom_mt_pair.py --pair button_push --horizon-label 10m
-    python scripts/evaluation/evaluate_custom_mt_pair.py --pair basketball_pickplace --horizon-label 5m
-    python scripts/evaluation/evaluate_custom_mt_pair.py --pair basketball_push --horizon-label 10m
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -27,7 +14,7 @@ os.environ.setdefault("NUMEXPR_NUM_THREADS", "1")
 
 import gymnasium as gym
 from gymnasium import spaces
-import metaworld  # noqa: F401
+import metaworld  #type :ignore
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -316,16 +303,26 @@ def summarize_raw(raw_df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, pd.
 def plot_learning_curves(summary: pd.DataFrame, output_dir: Path) -> None:
     figures_dir = output_dir / "figures"
     figures_dir.mkdir(parents=True, exist_ok=True)
+
     plot_df = summary[summary["checkpoint_label"] != "final"].copy()
     if plot_df.empty:
         plot_df = summary.copy()
+
     for (run_label, config_name), run_sub in plot_df.groupby(["run_label", "config_name"]):
         run_sub = run_sub.sort_values("checkpoint_step")
         prefix = safe_name(f"{run_label}_{config_name}")
+
+        # Combined success-rate curve: one line per environment.
         plt.figure(figsize=(10, 5))
         for env_name, env_sub in run_sub.groupby("env_name"):
             env_sub = env_sub.sort_values("checkpoint_step")
-            plt.plot(env_sub["checkpoint_step"], env_sub["mean_success_rate"], marker="o", markersize=3, label=env_name)
+            plt.plot(
+                env_sub["checkpoint_step"],
+                env_sub["mean_success_rate"],
+                marker="o",
+                markersize=3,
+                label=env_name,
+            )
         plt.xlabel("Checkpoint step")
         plt.ylabel("Success rate")
         plt.title(f"{run_label} / {config_name}: success rate per environment")
@@ -335,6 +332,61 @@ def plot_learning_curves(summary: pd.DataFrame, output_dir: Path) -> None:
         plt.tight_layout()
         plt.savefig(figures_dir / f"{prefix}_success_rate_per_env.png", dpi=200)
         plt.close()
+
+        # Combined return curve: one line per environment.
+        plt.figure(figsize=(10, 5))
+        for env_name, env_sub in run_sub.groupby("env_name"):
+            env_sub = env_sub.sort_values("checkpoint_step")
+            plt.plot(
+                env_sub["checkpoint_step"],
+                env_sub["mean_return"],
+                marker="o",
+                markersize=3,
+                label=env_name,
+            )
+        plt.xlabel("Checkpoint step")
+        plt.ylabel("Average return")
+        plt.title(f"{run_label} / {config_name}: average return per environment")
+        plt.grid(True, alpha=0.3)
+        plt.legend()
+        plt.tight_layout()
+        plt.savefig(figures_dir / f"{prefix}_avg_return_per_env.png", dpi=200)
+        plt.close()
+
+        for env_name, env_sub in run_sub.groupby("env_name"):
+            env_sub = env_sub.sort_values("checkpoint_step")
+            env_safe = safe_name(env_name)
+
+            plt.figure(figsize=(10, 5))
+            plt.plot(
+                env_sub["checkpoint_step"],
+                env_sub["mean_success_rate"],
+                marker="o",
+                markersize=3,
+            )
+            plt.xlabel("Checkpoint step")
+            plt.ylabel("Success rate")
+            plt.title(f"{run_label} / {config_name}: {env_name} success rate")
+            plt.ylim(-0.05, 1.05)
+            plt.grid(True, alpha=0.3)
+            plt.tight_layout()
+            plt.savefig(figures_dir / f"{prefix}_{env_safe}_success_rate.png", dpi=200)
+            plt.close()
+
+            plt.figure(figsize=(10, 5))
+            plt.plot(
+                env_sub["checkpoint_step"],
+                env_sub["mean_return"],
+                marker="o",
+                markersize=3,
+            )
+            plt.xlabel("Checkpoint step")
+            plt.ylabel("Average return")
+            plt.title(f"{run_label} / {config_name}: {env_name} average return")
+            plt.grid(True, alpha=0.3)
+            plt.tight_layout()
+            plt.savefig(figures_dir / f"{prefix}_{env_safe}_avg_return.png", dpi=200)
+            plt.close()
 
 
 def parse_args() -> argparse.Namespace:
