@@ -173,8 +173,6 @@ Training horizon:
 
 Το `pick-place-v3` μαθαίνεται γενικά νωρίτερα από το `basketball-v3`. Στο `config_3`, το `pick-place-v3` φτάνει σε τέλεια επιτυχία ήδη στο `1.5M`, ενώ το `basketball-v3` φτάνει σε τέλεια επιτυχία στο `2.3M`. Αυτό δείχνει ότι το shared policy μπορεί να μάθει και τα δύο tasks, αλλά ο ρυθμός μάθησης διαφέρει ανά task.
 
-Τα final results δείχνουν επίσης γιατί χρειάζεται checkpoint-based evaluation. Για παράδειγμα, το `config_3` φτάνει σε τέλεια επιτυχία σε προηγούμενα checkpoints, αλλά στο final model η απόδοση πέφτει σε `0.68` για `basketball-v3` και `0.88` για `pick-place-v3`. Άρα το final model δεν είναι πάντα το καλύτερο checkpoint.
-
 ---
 
 ## Basketball + Push
