@@ -10,7 +10,6 @@
 | `config_2` | Conservative/stable         | `3e-5`          | `2048`    | `16,384`                | `1024`       | `15`       | `240`                        | `0.10`       | `0.002`    | `0.8`     | `0.3`           | `[256,256]` |
 | `config_3` | Exploration/aggressive      | `2e-4`          | `2048`    | `16,384`                | `1024`       | `10`       | `160`                        | `0.20`       | `0.01`     | `0.5`     | `0.5`           | `[256,256]` |
 
-### Λογική πίσω από τα configurations
 
 #### `config_1` — Balanced custom-MT baseline
 
