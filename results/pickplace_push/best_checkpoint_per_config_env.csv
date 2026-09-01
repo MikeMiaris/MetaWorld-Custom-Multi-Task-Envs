@@ -1,0 +1,7 @@
+run_label,config_name,checkpoint_step,checkpoint_label,env_name,task_one_hot_idx,mean_success_rate,std_success_rate,mean_return,std_return_across_seeds,mean_steps,mean_first_success_step,eval_seeds,total_episodes,goals
+pickplace_push,config_1,3250000,3250000,pick-place-v3,0,1.0,,68.05698718221888,,53.08,53.08,1,50,50
+pickplace_push,config_1,4600000,4600000,push-v3,1,1.0,,230.20820180071792,,50.58,50.58,1,50,50
+pickplace_push,config_2,4250000,4250000,pick-place-v3,0,1.0,,62.23449944791842,,42.98,42.98,1,50,50
+pickplace_push,config_2,8550000,8550000,push-v3,1,1.0,,202.58148549644747,,47.38,47.38,1,50,50
+pickplace_push,config_3,4950000,4950000,pick-place-v3,0,1.0,,63.416526955559796,,42.36,42.36,1,50,50
+pickplace_push,config_3,3950000,3950000,push-v3,1,1.0,,199.9147287049023,,45.6,45.6,1,50,50

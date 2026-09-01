@@ -1,0 +1,4 @@
+run_label,config_name,pick-place-v3,push-v3
+pickplace_push,config_1,1.0,1.0
+pickplace_push,config_2,1.0,1.0
+pickplace_push,config_3,1.0,1.0
