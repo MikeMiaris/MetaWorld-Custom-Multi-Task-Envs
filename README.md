@@ -174,8 +174,6 @@ Training horizon:
 
 Το `pick-place-v3` μαθαίνεται γενικά νωρίτερα από το `basketball-v3`. Στο `config_3`, το `pick-place-v3` φτάνει σε τέλεια επιτυχία ήδη στο `1.5M`, ενώ το `basketball-v3` φτάνει σε τέλεια επιτυχία στο `2.3M`. Αυτό δείχνει ότι το shared policy μπορεί να μάθει και τα δύο tasks, αλλά ο ρυθμός μάθησης διαφέρει ανά task.
 
-Τα final results δείχνουν επίσης γιατί χρειάζεται checkpoint-based evaluation. Για παράδειγμα, το `config_3` φτάνει σε τέλεια επιτυχία σε προηγούμενα checkpoints, αλλά στο final model η απόδοση πέφτει σε `0.68` για `basketball-v3` και `0.88` για `pick-place-v3`. Άρα το final model δεν είναι πάντα το καλύτερο checkpoint.
-
 ---
 
 ## Basketball + Push
@@ -275,9 +273,97 @@ push-v3       = 1.00
 
 Το `config_2` λύνει πλήρως το `push-v3`, αλλά δεν μαθαίνει καθόλου το `basketball-v3`. Αυτό δείχνει ότι το conservative PPO setup δεν είναι αρκετό για το δυσκολότερο task σε αυτό το pair.
 
-Το `config_3` αποτυγχάνει σχεδόν πλήρως στο `basketball-v3` και πετυχαίνει μόνο μερική απόδοση στο `push-v3`. Αυτό δείχνει ότι περισσότερο entropy/exploration δεν οδηγεί απαραίτητα σε καλύτερη multi-task απόδοση.
+Το `config_3` αποτυγχάνει σχεδόν πλήρως στο `basketball-v3` και πετυχαίνει μόνο μερική απόδοση στο `push-v3`. Αυτό δείχνει ότι περισσότερο entropy/exploration δεν οδηγεί απαραίτητα σε καλύτερη απόδοση.
 
 ---
+## Pick-Place + Push
+
+Pair id:
+
+```text
+pickplace_push
+```
+
+Tasks:
+
+```text
+pick-place-v3 + push-v3
+```
+
+Training horizon:
+
+```text
+10M timesteps
+```
+
+### Best success pivot
+
+| Config     | `pick-place-v3`   | `push-v3`   |
+|:-----------|:------------------|:------------|
+| `config_1` | `1.00`            | `1.00`      |
+| `config_2` | `1.00`            | `1.00`      |
+| `config_3` | `1.00`            | `1.00`      |
+
+### Best checkpoint per config and environment
+
+| Config     | Environment     | Best checkpoint   | Success rate   | Average return   | Mean steps   | First success step   | Eval episodes   |
+|:-----------|:----------------|:------------------|:---------------|:-----------------|:-------------|:---------------------|:----------------|
+| `config_1` | `pick-place-v3` | `3.25M`           | `1.00`         | `68.06`          | `53.08`      | `53.08`              | `50`            |
+| `config_1` | `push-v3`       | `4.60M`           | `1.00`         | `230.21`         | `50.58`      | `50.58`              | `50`            |
+| `config_2` | `pick-place-v3` | `4.25M`           | `1.00`         | `62.23`          | `42.98`      | `42.98`              | `50`            |
+| `config_2` | `push-v3`       | `8.55M`           | `1.00`         | `202.58`         | `47.38`      | `47.38`              | `50`            |
+| `config_3` | `pick-place-v3` | `4.95M`           | `1.00`         | `63.42`          | `42.36`      | `42.36`              | `50`            |
+| `config_3` | `push-v3`       | `3.95M`           | `1.00`         | `199.91`         | `45.60`      | `45.60`              | `50`            |
+
+### First checkpoint that reached 1.00 success
+
+| Config     | Environment     | First 1.00 checkpoint   | Return at first 1.00   |
+|:-----------|:----------------|:------------------------|:-----------------------|
+| `config_1` | `pick-place-v3` | `2.35M`                 | `56.91`                |
+| `config_1` | `push-v3`       | `2.65M`                 | `148.76`               |
+| `config_2` | `pick-place-v3` | `4.20M`                 | `59.44`                |
+| `config_2` | `push-v3`       | `4.90M`                 | `168.03`               |
+| `config_3` | `pick-place-v3` | `2.65M`                 | `56.81`                |
+| `config_3` | `push-v3`       | `1.95M`                 | `108.66`               |
+
+### Final model results
+
+| Config     | Environment     | Final step   | Final success   | Final return   | Mean steps   |
+|:-----------|:----------------|:-------------|:----------------|:---------------|:-------------|
+| `config_1` | `pick-place-v3` | `10M`        | `1.00`          | `54.71`        | `40.80`      |
+| `config_1` | `push-v3`       | `10M`        | `0.98`          | `137.09`       | `46.08`      |
+| `config_2` | `pick-place-v3` | `10M`        | `1.00`          | `56.39`        | `40.74`      |
+| `config_2` | `push-v3`       | `10M`        | `1.00`          | `129.94`       | `37.78`      |
+| `config_3` | `pick-place-v3` | `10M`        | `0.92`          | `51.68`        | `78.96`      |
+| `config_3` | `push-v3`       | `10M`        | `0.90`          | `138.16`       | `89.34`      |
+
+### Learning curves
+
+#### `config_1`
+
+![pickplace_push config_1 success](results/pickplace_push/figures/pickplace_push_config_1_success_rate_per_env.png)
+
+![pickplace_push config_1 return](results/pickplace_push/figures/pickplace_push_config_1_avg_return_per_env.png)
+
+#### `config_2`
+
+![pickplace_push config_2 success](results/pickplace_push/figures/pickplace_push_config_2_success_rate_per_env.png)
+
+![pickplace_push config_2 return](results/pickplace_push/figures/pickplace_push_config_2_avg_return_per_env.png)
+
+#### `config_3`
+
+![pickplace_push config_3 success](results/pickplace_push/figures/pickplace_push_config_3_success_rate_per_env.png)
+
+![pickplace_push config_3 return](results/pickplace_push/figures/pickplace_push_config_3_avg_return_per_env.png)
+
+
+### Συμπέρασμα
+
+Το `pickplace_push` είναι το πιο σταθερό object-manipulation pair από τα διαθέσιμα αποτελέσματα. Και τα τρία configurations φτάνουν σε `1.00` success rate και στα δύο tasks σε κάποιο checkpoint.
+
+Το `push-v3` φτάνει σε τέλεια επιτυχία αρκετά νωρίς σε `config_3`, περίπου στο `1.95M`, ενώ τα `config_1` και `config_2` φτάνουν σε τέλεια επιτυχία αργότερα. Το `pick-place-v3` φτάνει επίσης σε τέλεια επιτυχία και στα τρία configs.
+
 
 ## How to Run New Experiments
 
